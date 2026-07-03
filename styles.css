@@ -1675,30 +1675,34 @@ textarea:focus {
   }
 
   .report-item {
-    grid-template-columns: 46px minmax(0, 1fr);
+    grid-template-columns: 32px minmax(0, 1fr);
     gap: 0 14px;
     padding: 24px 0;
   }
 
   .report-date-col {
-    display: none;
+    grid-column: 2;
+    grid-row: 1;
+    display: flex;
+    justify-content: flex-start;
+    padding: 0 0 8px 0;
+    text-align: left;
   }
 
   .report-date-col time {
     flex-direction: row;
     gap: 6px;
+    align-items: baseline;
   }
 
-  .report-item:not(:last-child)::after {
-    top: 48px;
-    bottom: -48px;
-    left: 21px;
+  .report-node {
+    grid-column: 1;
+    grid-row: 1 / 3;
   }
 
-  .report-number {
-    width: 42px;
-    height: 42px;
-    font-size: 0.95rem;
+  .report-content-card {
+    grid-column: 2;
+    grid-row: 2;
   }
 
   .report-entry {

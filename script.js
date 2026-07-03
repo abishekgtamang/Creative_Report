@@ -4,6 +4,22 @@ const siteHeader = document.querySelector(".site-header");
 const navToggle = document.querySelector(".nav-toggle");
 const navLinks = document.querySelector(".nav-links");
 const contactEmail = "abishekgtamang@gmail.com,moktanamit1234@gmail.com";
+const themeToggle = document.getElementById("theme-toggle");
+
+// Theme toggle: restore saved preference or respect system preference
+const savedTheme = localStorage.getItem("theme");
+if (savedTheme) {
+  document.documentElement.setAttribute("data-theme", savedTheme);
+} else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+  document.documentElement.setAttribute("data-theme", "dark");
+}
+
+themeToggle?.addEventListener("click", () => {
+  const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+  const newTheme = isDark ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", newTheme);
+  localStorage.setItem("theme", newTheme);
+});
 const revealItems = document.querySelectorAll(
   ".hero-copy, .intro-photo, .intro-content, .section-heading, .report-item, .map-header, .map-stats, .map-container, .support-copy, .contact-box, .support-form"
 );
@@ -21,12 +37,17 @@ const updateHeaderVisibility = () => {
 
   const currentScrollY = window.scrollY;
   const isScrollingDown = currentScrollY > lastScrollY;
+  const isScrollingDownSignificantly = currentScrollY > lastScrollY + 5;
   const hasScrolledPastHeader = currentScrollY > siteHeader.offsetHeight + 24;
   const isMenuOpen = siteHeader.classList.contains("nav-open");
 
+  if (isScrollingDownSignificantly && isMenuOpen) {
+    closeNavMenu();
+  }
+
   siteHeader.classList.toggle(
     "is-hidden",
-    isScrollingDown && hasScrolledPastHeader && !isMenuOpen
+    isScrollingDown && hasScrolledPastHeader && !siteHeader.classList.contains("nav-open")
   );
   lastScrollY = Math.max(currentScrollY, 0);
 };

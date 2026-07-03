@@ -1,0 +1,7 @@
+1:"$Sreact.fragment"
+2:I[38255,["/_next/static/chunks/05-c3ty_6dwfk.js","/_next/static/chunks/14mrh2-p_w84d.js","/_next/static/chunks/390ksitiascyd.js"],"Waves"]
+3:I[71459,["/_next/static/chunks/05-c3ty_6dwfk.js","/_next/static/chunks/14mrh2-p_w84d.js","/_next/static/chunks/390ksitiascyd.js"],"default"]
+4:I[97367,["/_next/static/chunks/05-c3ty_6dwfk.js","/_next/static/chunks/14mrh2-p_w84d.js"],"OutletBoundary"]
+5:"$Sreact.suspense"
+0:{"rsc":["$","$1","c",{"children":[["$","main",null,{"className":"relative flex min-h-screen flex-col items-center justify-center px-4 py-16 md:py-24","children":[["$","div",null,{"className":"fixed inset-0 -z-10 bg-transparent","children":["$","$L2",null,{"className":"w-full h-full"}]}],["$","div",null,{"className":"w-full max-w-4xl relative z-10","children":[["$","div",null,{"className":"mb-12 text-center","children":[["$","h1",null,{"className":"text-4xl font-bold tracking-tight text-foreground md:text-5xl","children":"Timeline & Reports"}],["$","p",null,{"className":"mt-3 text-lg text-muted-foreground","children":"A journey of bringing accessible Bible study methods to those who need it most."}]]}],["$","$L3",null,{}]]}]]}],[["$","script","script-0",{"src":"/_next/static/chunks/390ksitiascyd.js","async":true}]],["$","$L4",null,{"children":["$","$5",null,{"name":"Next.MetadataOutlet","children":"$@6"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"oBhSDOI4cM8R9BpG8iERe"}
+6:null

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -21,13 +21,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Libre+Baskerville:wght@400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <canvas id="bg-canvas" aria-hidden="true"></canvas>
+    <svg id="bg-waves" class="block w-full h-full js-svg" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
     <div id="mouse-aura" aria-hidden="true"></div>
     <a class="skip-link" href="#main-content">Skip to main content</a>
 
@@ -119,29 +119,29 @@
 
       <section class="section-shell reports" id="reports" aria-labelledby="reports-title">
         <div class="section-heading scroll-reveal">
-          <h2 id="reports-title">Timeline & Reports</h2>
+          <h2 id="reports-title">Timeline &amp; Reports</h2>
           <p>A journey of bringing accessible Bible study methods to those who need it most.</p>
         </div>
         <div class="report-list" aria-label="Timeline and report highlights">
+
           <article class="report-item scroll-reveal">
+            <div class="report-date-col">
+              <time datetime="2026-03-08">
+                <span class="report-date-month">March</span>
+                <span class="report-date-day">8-10, 2026</span>
+              </time>
+            </div>
             <div class="report-node">
-              <span class="report-number">01</span>
+              <span class="report-number"></span>
               <div class="report-line"></div>
             </div>
             <div class="report-content-card">
               <div class="report-entry">
-                <time datetime="2026-03-08">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                  March 8-10, 2026
-                </time>
+
                 <h3>Sunachuri, Manahari, Nepal</h3>
+
                 <div class="report-actions">
-                  <a
-                    class="report-attachment"
-                    href="assets/sunachuri-report.pdf"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+                  <a class="report-attachment" href="assets/sunachuri-report.pdf" target="_blank" rel="noopener noreferrer">
                     View Full Report
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
                   </a>
@@ -151,24 +151,23 @@
           </article>
 
           <article class="report-item scroll-reveal">
+            <div class="report-date-col">
+              <time datetime="2026-06-17">
+                <span class="report-date-month">June</span>
+                <span class="report-date-day">17-19, 2026</span>
+              </time>
+            </div>
             <div class="report-node">
-              <span class="report-number">02</span>
+              <span class="report-number"></span>
               <div class="report-line"></div>
             </div>
             <div class="report-content-card">
               <div class="report-entry">
-                <time datetime="2026-06-17">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                  June 17-19, 2026
-                </time>
+
                 <h3>Evangelical Christian College, Lalitpur-18, Nepal</h3>
+
                 <div class="report-actions">
-                  <a
-                    class="report-attachment"
-                    href="https://creative-bible-exposition.vercel.app/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+                  <a class="report-attachment" href="https://creative-bible-exposition.vercel.app/" target="_blank" rel="noopener noreferrer">
                     View Full Report
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
                   </a>
@@ -178,16 +177,19 @@
           </article>
 
           <article class="report-item report-continuation scroll-reveal">
+            <div class="report-date-col"></div>
             <div class="report-node">
               <span class="report-number pulse-dot"></span>
             </div>
             <div class="report-content-card">
               <div class="report-entry">
+
                 <h3>The journey continues...</h3>
-                <p class="report-summary">More training sessions and reports will be added here as the ministry expands.</p>
+
               </div>
             </div>
           </article>
+
         </div>
       </section>
 
@@ -402,6 +404,7 @@
       <a href="#top">Back to top</a>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/simplex-noise/2.4.0/simplex-noise.min.js"></script>
     <script src="script.js" defer></script>
   </body>
 </html>

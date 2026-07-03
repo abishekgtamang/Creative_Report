@@ -197,103 +197,165 @@ supportForm?.addEventListener("submit", (event) => {
   statusText.textContent = `Thank you, ${name}. Your email app is opening.`;
 });
 
-// Interactive Canvas Wave Background
-const canvas = document.getElementById("bg-canvas");
-if (canvas) {
-  const ctx = canvas.getContext("2d");
+// Interactive SVG Wave Background
+const svg = document.getElementById("bg-waves");
+if (svg && window.SimplexNoise) {
+  const noise2D = new SimplexNoise().noise2D.bind(new SimplexNoise());
+  const colors = ["#ffc64f", "#6bb9d4", "#084463", "#a3ddf0", "#436c7c"];
+  let mouse = { x: -10, y: 0, lx: 0, ly: 0, sx: 0, sy: 0, v: 0, vs: 0, a: 0, set: false };
+  let paths = [];
+  let lines = [];
   let width, height;
-  let mouse = { x: -1000, y: -1000 };
 
-  const resize = () => {
+  const setSize = () => {
     width = window.innerWidth;
     height = window.innerHeight;
-    canvas.width = width;
-    canvas.height = height;
+    svg.style.width = `${width}px`;
+    svg.style.height = `${height}px`;
   };
-  
+
+  const setLines = () => {
+    paths.forEach(p => p.remove());
+    paths = [];
+    lines = [];
+
+    const xGap = 24;
+    const yGap = 32;
+    const oWidth = width + 200;
+    const oHeight = height + 2500; // Generate extra height for parallax scrolling
+    const totalLines = Math.ceil(oWidth / xGap);
+    const totalPoints = Math.ceil(oHeight / yGap);
+    const xStart = (width - xGap * totalLines) / 2;
+    const yStart = (height - yGap * totalPoints) / 2;
+
+    for (let i = 0; i < totalLines; i++) {
+      const points = [];
+      for (let j = 0; j < totalPoints; j++) {
+        points.push({
+          x: xStart + xGap * i,
+          y: yStart + yGap * j,
+          wave: { x: 0, y: 0 },
+          cursor: { x: 0, y: 0, vx: 0, vy: 0 }
+        });
+      }
+
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('fill', 'none');
+      path.setAttribute('stroke', colors[i % colors.length]);
+      path.setAttribute('stroke-width', '1.0');
+      path.setAttribute('opacity', '0.15'); // Very soft watermark-style opacity
+      
+      svg.appendChild(path);
+      paths.push(path);
+      lines.push(points);
+    }
+  };
+
+  const resize = () => {
+    setSize();
+    setLines();
+  };
+
   window.addEventListener("resize", resize);
   resize();
 
   window.addEventListener("mousemove", (e) => {
     mouse.x = e.clientX;
     mouse.y = e.clientY;
+    if (!mouse.set) {
+      mouse.sx = mouse.x;
+      mouse.sy = mouse.y;
+      mouse.lx = mouse.x;
+      mouse.ly = mouse.y;
+      mouse.set = true;
+    }
   }, { passive: true });
 
-  // Generate random, subtle, and different-colored waves
-  const numWaves = 4;
-  const waves = [];
-  for (let i = 0; i < numWaves; i++) {
-    // Generate different random hues spread across the spectrum
-    const hue = Math.floor(Math.random() * 360);
-    waves.push({
-      y: 0.25 + (i * 0.2) + (Math.random() * 0.1 - 0.05),
-      length1: 0.001 + Math.random() * 0.0015,
-      length2: 0.002 + Math.random() * 0.003,
-      amplitude: 120 + Math.random() * 100,
-      speed1: 0.0003 + Math.random() * 0.0004,
-      speed2: 0.0005 + Math.random() * 0.0005,
-      color: `hsla(${hue}, 70%, 75%, 0.03)`, // Very subtle fill
-      lineColor: `hsla(${hue}, 60%, 65%, 0.15)`, // Subtle stroke
-      lineWidth: 1 + Math.random() * 0.5, // Thin lines
-      scrollPhase: 0.001 + Math.random() * 0.002,
-      scrollY: 0.05 + i * 0.06
-    });
-  }
+  const movePoints = (time) => {
+    lines.forEach(points => {
+      points.forEach(p => {
+        const move = noise2D(
+          (p.x + time * 0.008) * 0.003,
+          (p.y + time * 0.003) * 0.002
+        ) * 8;
 
-  let time = 0;
+        p.wave.x = Math.cos(move) * 12;
+        p.wave.y = Math.sin(move) * 6;
 
-  const animateWaves = () => {
-    ctx.clearRect(0, 0, width, height);
-    time += 1;
-    const scrollPos = window.scrollY;
+        const dx = p.x - mouse.sx;
+        const dy = p.y - mouse.sy;
+        const d = Math.hypot(dx, dy);
+        const l = Math.max(175, mouse.vs);
 
-    waves.forEach((wave) => {
-      ctx.beginPath();
-      
-      for (let x = 0; x <= width + 20; x += 20) {
-        // Complex random wave pattern using dual sine harmonics
-        const harmonic1 = Math.sin(x * wave.length1 + time * wave.speed1 + scrollPos * wave.scrollPhase);
-        const harmonic2 = Math.sin(x * wave.length2 - time * wave.speed2 + scrollPos * (wave.scrollPhase * 1.5)) * 0.4;
-        
-        let y = (harmonic1 + harmonic2) * wave.amplitude 
-                + height * wave.y 
-                - (scrollPos * wave.scrollY);
-        
-        // Fluid mouse repulsion logic
-        const dx = x - mouse.x;
-        const dy = y - mouse.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        
-        const repulsionRadius = 400;
-        if (distance < repulsionRadius) {
-          // Calculate an easing force so it feels like liquid tension
-          const force = Math.pow((repulsionRadius - distance) / repulsionRadius, 2);
-          const pushY = dy > 0 ? force * 120 : -force * 120; 
-          y += pushY;
+        if (d < l) {
+          const s = 1 - d / l;
+          const f = Math.cos(d * 0.001) * s;
+          p.cursor.vx += Math.cos(mouse.a) * f * l * mouse.vs * 0.00035;
+          p.cursor.vy += Math.sin(mouse.a) * f * l * mouse.vs * 0.00035;
         }
 
-        if (x === 0) {
-          ctx.moveTo(x, y);
-        } else {
-          ctx.lineTo(x, y);
-        }
-      }
-
-      // Stroke the wave line BEFORE closing the path to the bottom
-      ctx.strokeStyle = wave.lineColor;
-      ctx.lineWidth = wave.lineWidth;
-      ctx.stroke();
-
-      // Complete the path for the fill
-      ctx.lineTo(width, height);
-      ctx.lineTo(0, height);
-      ctx.closePath();
-      ctx.fillStyle = wave.color;
-      ctx.fill();
+        p.cursor.vx += (0 - p.cursor.x) * 0.01;
+        p.cursor.vy += (0 - p.cursor.y) * 0.01;
+        p.cursor.vx *= 0.95;
+        p.cursor.vy *= 0.95;
+        p.cursor.x += p.cursor.vx;
+        p.cursor.y += p.cursor.vy;
+        p.cursor.x = Math.min(50, Math.max(-50, p.cursor.x));
+        p.cursor.y = Math.min(50, Math.max(-50, p.cursor.y));
+      });
     });
-
-    requestAnimationFrame(animateWaves);
   };
 
-  animateWaves();
+  const moved = (point) => {
+    return {
+      x: point.x + point.wave.x + point.cursor.x,
+      y: point.y + point.wave.y + point.cursor.y - window.scrollY * 0.4
+    };
+  };
+
+  const drawLines = () => {
+    lines.forEach((points, lIndex) => {
+      if (points.length < 2 || !paths[lIndex]) return;
+      const first = moved(points[0]);
+      let d = `M ${first.x} ${first.y}`;
+      
+      // Use Quadratic Bezier curves for perfectly smooth lines with fewer points
+      for (let i = 1; i < points.length - 1; i++) {
+        const current = moved(points[i]);
+        const next = moved(points[i + 1]);
+        const xc = (current.x + next.x) / 2;
+        const yc = (current.y + next.y) / 2;
+        d += ` Q ${current.x} ${current.y} ${xc} ${yc}`;
+      }
+      
+      // Connect to the very last point
+      const last = moved(points[points.length - 1]);
+      d += ` L ${last.x} ${last.y}`;
+      
+      paths[lIndex].setAttribute('d', d);
+    });
+  };
+
+  const tick = (time) => {
+    mouse.sx += (mouse.x - mouse.sx) * 0.1;
+    mouse.sy += (mouse.y - mouse.sy) * 0.1;
+
+    const dx = mouse.x - mouse.lx;
+    const dy = mouse.y - mouse.ly;
+    const d = Math.hypot(dx, dy);
+
+    mouse.v = d;
+    mouse.vs += (d - mouse.vs) * 0.1;
+    mouse.vs = Math.min(100, mouse.vs);
+
+    mouse.lx = mouse.x;
+    mouse.ly = mouse.y;
+    mouse.a = Math.atan2(dy, dx);
+
+    movePoints(time);
+    drawLines();
+    requestAnimationFrame(tick);
+  };
+
+  requestAnimationFrame(tick);
 }

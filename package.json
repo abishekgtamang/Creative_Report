@@ -1,0 +1,46 @@
+{
+  "name": "creative_report",
+  "version": "1.0.0",
+  "description": "A single-page website for **Creative Bible Exposition** — a ministry that equips ordinary preachers with simple, powerful Bible study methods using both sides of the brain.",
+  "main": "script.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abishekgtamang/Creative_Report.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/abishekgtamang/Creative_Report/issues"
+  },
+  "homepage": "https://github.com/abishekgtamang/Creative_Report#readme",
+  "dependencies": {
+    "@radix-ui/react-slot": "^1.3.0",
+    "@tailwindcss/postcss": "^4.3.2",
+    "@types/node": "^26.1.0",
+    "@types/react": "^19.2.17",
+    "autoprefixer": "^10.5.2",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.42.2",
+    "lucide-react": "^1.23.0",
+    "next": "^16.2.10",
+    "postcss": "^8.5.16",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "simplex-noise": "^4.0.3",
+    "tailwind-merge": "^3.6.0",
+    "tailwindcss": "^4.3.2",
+    "typescript": "^6.0.3"
+  }
+}

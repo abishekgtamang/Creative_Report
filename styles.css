@@ -23,9 +23,9 @@
   --shadow: 0 22px 60px rgba(8, 68, 99, 0.16);
   --radius: 8px;
   --max-width: 1120px;
-  --heading: "Brolian", "Libre Baskerville", Georgia, serif;
-  --serif: "Libre Baskerville", Georgia, serif;
-  --sans: "Inter", Arial, sans-serif;
+  --heading: "Playfair Display", Georgia, serif;
+  --serif: "Playfair Display", Georgia, serif;
+  --sans: "Outfit", Arial, sans-serif;
 }
 
 ::selection {
@@ -210,35 +210,35 @@ body {
   line-height: 1.6;
 }
 
-#bg-canvas {
+#bg-waves {
   position: fixed;
   top: 0;
   left: 0;
+  z-index: -1;
+  pointer-events: none;
   width: 100vw;
   height: 100vh;
-  z-index: -2;
-  pointer-events: none;
 }
 
 #mouse-aura {
   position: fixed;
-  top: -400px;
-  left: -400px;
-  width: 800px;
-  height: 800px;
+  top: -300px;
+  left: -300px;
+  width: 600px;
+  height: 600px;
   border-radius: 50%;
   pointer-events: none;
   z-index: -1;
   background: radial-gradient(
     circle at 50% 50%,
-    rgba(107, 185, 212, 0.22) 0%,
-    rgba(255, 198, 79, 0.08) 40%,
+    rgba(107, 185, 212, 0.12) 0%,
+    rgba(255, 198, 79, 0.04) 40%,
     transparent 70%
   );
   will-change: transform;
   transform: translate(var(--mouse-x, 50vw), var(--mouse-y, 50vh));
-  opacity: 0; /* Hidden initially, shown via JS when mouse moves */
-  transition: opacity 1s ease-out;
+  opacity: 0;
+  transition: opacity 1s ease-out, transform 0.8s cubic-bezier(0.15, 0.85, 0.35, 1);
 }
 
 @keyframes curved-pattern-drift {
@@ -893,9 +893,82 @@ h3 {
 .report-item {
   position: relative;
   display: grid;
-  grid-template-columns: 56px minmax(0, 1fr);
-  gap: clamp(16px, 4vw, 36px);
+  grid-template-columns: 90px 32px minmax(0, 1fr);
+  gap: 0 16px;
   align-items: stretch;
+}
+
+/* Date column — sits to the left of the node */
+.report-date-col {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding-top: 12px;
+  text-align: right;
+}
+
+.report-date-col time {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  color: var(--muted);
+  font-family: var(--sans);
+  transition: color 400ms ease;
+}
+
+.report-item:hover .report-date-col time {
+  color: var(--peacock);
+}
+
+:root[data-theme="dark"] .report-item:hover .report-date-col time {
+  color: var(--icy-sky);
+}
+
+.report-date-month {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--icy-sky);
+}
+
+.report-date-day {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--peacock);
+}
+
+:root[data-theme="dark"] .report-date-day {
+  color: var(--ink);
+}
+
+/* Icon badge — small circle with icon inside the content card */
+.report-icon-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(107, 185, 212, 0.12);
+  color: var(--icy-sky);
+  margin-bottom: 2px;
+  flex-shrink: 0;
+  transition: background 400ms ease, transform 400ms ease;
+}
+
+.report-item:hover .report-icon-badge {
+  background: rgba(255, 198, 79, 0.18);
+  color: var(--saffron);
+  transform: scale(1.1);
+}
+
+:root[data-theme="dark"] .report-icon-badge {
+  background: rgba(107, 185, 212, 0.1);
+}
+
+.report-icon-badge--pulse {
+  animation: pulse-animation 2s infinite;
 }
 
 .report-node {
@@ -907,28 +980,20 @@ h3 {
 }
 
 .report-number {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
+  display: block;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
-  background: var(--bg);
-  border: 2px solid var(--saffron);
-  color: var(--peacock);
-  font-family: var(--serif);
-  font-size: 1.1rem;
-  font-weight: 700;
-  box-shadow: 0 4px 16px rgba(255, 198, 79, 0.25);
-  transition: transform 400ms cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 400ms ease, background 400ms ease, color 400ms ease;
+  background: var(--saffron);
+  box-shadow: 0 0 0 4px var(--bg), 0 4px 12px rgba(255, 198, 79, 0.4);
+  margin-top: 16px;
+  transition: transform 400ms cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 400ms ease;
   flex-shrink: 0;
 }
 
 .report-item:hover .report-number {
-  transform: scale(1.15);
-  box-shadow: 0 8px 24px rgba(255, 198, 79, 0.45);
-  background: var(--saffron);
-  color: var(--olive-dark);
+  transform: scale(1.3);
+  box-shadow: 0 0 0 4px var(--bg), 0 6px 16px rgba(255, 198, 79, 0.6);
 }
 
 .pulse-dot {
@@ -967,8 +1032,8 @@ h3 {
 .report-content-card {
   background: rgba(255, 255, 255, 0.45);
   border: 1px solid rgba(255, 255, 255, 0.9);
-  border-radius: 20px;
-  padding: clamp(16px, 2.5vw, 24px) clamp(24px, 4vw, 36px);
+  border-radius: 12px;
+  padding: 12px 16px;
   box-shadow: 0 12px 36px rgba(8, 68, 99, 0.04);
   transition: transform 400ms cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 400ms ease, background 400ms ease;
   position: relative;
@@ -997,7 +1062,7 @@ h3 {
 .report-entry {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 8px;
 }
 
 .report-entry time {
@@ -1012,10 +1077,14 @@ h3 {
 }
 
 .report-entry h3 {
-  font-size: clamp(1.25rem, 2.5vw, 1.55rem);
+  font-size: 1.05rem;
   margin: 0;
   color: var(--peacock);
   line-height: 1.35;
+}
+
+:root[data-theme="dark"] .report-entry h3 {
+  color: var(--ink);
 }
 
 .report-summary {
@@ -1032,15 +1101,15 @@ h3 {
 .report-attachment {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 6px;
   background: var(--paper);
   color: var(--peacock);
-  padding: 12px 24px;
-  border-radius: 12px;
-  font-size: 0.95rem;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.85rem;
   font-weight: 700;
   border: 1px solid rgba(8, 68, 99, 0.1);
-  box-shadow: 0 4px 14px rgba(8, 68, 99, 0.06);
+  box-shadow: 0 2px 8px rgba(8, 68, 99, 0.04);
   transition: background 300ms ease, transform 300ms ease, box-shadow 300ms ease, border-color 300ms ease, color 300ms ease;
   text-decoration: none;
 }
@@ -1276,6 +1345,10 @@ h3 {
   color: var(--peacock);
   font-family: var(--heading);
   font-size: clamp(1.25rem, 2vw, 1.6rem);
+}
+
+:root[data-theme="dark"] .contact-box h3 {
+  color: var(--ink);
 }
 
 .contact-details {
@@ -1603,8 +1676,17 @@ textarea:focus {
 
   .report-item {
     grid-template-columns: 46px minmax(0, 1fr);
-    gap: 14px;
+    gap: 0 14px;
     padding: 24px 0;
+  }
+
+  .report-date-col {
+    display: none;
+  }
+
+  .report-date-col time {
+    flex-direction: row;
+    gap: 6px;
   }
 
   .report-item:not(:last-child)::after {

@@ -851,6 +851,17 @@ h3 {
   margin-bottom: 32px;
   overflow: hidden;
   padding: clamp(56px, 8vw, 96px) clamp(22px, 5vw, 56px);
+  transition: background 400ms ease, border-color 400ms ease, box-shadow 400ms ease;
+}
+
+:root[data-theme="dark"] .reports {
+  border-color: rgba(107, 185, 212, 0.18);
+  background:
+    linear-gradient(135deg, rgba(21, 48, 63, 0.85), rgba(12, 30, 43, 0.6)),
+    rgba(12, 30, 43, 0.7);
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(107, 185, 212, 0.12);
 }
 
 .section-heading {
@@ -1142,12 +1153,23 @@ h3 {
   max-height: 420px;
 }
 
-.nepal-outline {
-  transition: filter 320ms ease;
+.nepal-district {
+  transition: filter 320ms ease, fill 320ms ease, stroke 320ms ease, stroke-width 320ms ease;
+  transform-origin: center;
+  transform-box: fill-box;
 }
 
-.nepal-map:hover .nepal-outline {
+.nepal-map:hover .nepal-district {
   filter: brightness(0.97);
+}
+
+.nepal-district:hover {
+  fill: var(--peacock) !important;
+  stroke: var(--ink) !important;
+  stroke-width: 1.5px !important;
+  filter: brightness(1) drop-shadow(0 2px 4px rgba(8, 68, 99, 0.2)) !important;
+  cursor: pointer;
+  z-index: 10;
 }
 
 .location-group {
@@ -1277,7 +1299,7 @@ h3 {
 }
 
 .contact-details dt {
-  color: var(--peacock);
+  color: var(--ink);
   font-size: 0.86rem;
   font-weight: 800;
   text-transform: uppercase;
@@ -1292,7 +1314,7 @@ h3 {
 }
 
 .contact-details a {
-  color: var(--peacock);
+  color: var(--ink);
   text-decoration: underline;
   text-decoration-color: rgba(255, 198, 79, 0.75);
   text-underline-offset: 3px;
